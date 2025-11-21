@@ -1,0 +1,63 @@
+/* Import Tailwind base, components, and utilities */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom base styles */
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
+
+/* Custom component styles */
+@layer components {
+  /* Loading spinner */
+  .rybbit-loading {
+    @apply flex flex-col items-center justify-center p-12;
+  }
+
+  .rybbit-loading-spinner {
+    @apply w-12 h-12 border-4 border-rybbit-light border-t-rybbit-primary rounded-full animate-spin;
+  }
+
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-gray-100 rounded;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded hover:bg-gray-400;
+  }
+}
+
+/* Custom utility classes */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* WordPress admin compatibility overrides */
+#rybbit-admin-app {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+}
+
+/* Reset WordPress admin styles within our app */
+#rybbit-admin-app * {
+  box-sizing: border-box;
+}
+
+#rybbit-admin-app input[type="text"],
+#rybbit-admin-app input[type="email"],
+#rybbit-admin-app input[type="url"],
+#rybbit-admin-app input[type="password"],
+#rybbit-admin-app input[type="number"],
+#rybbit-admin-app textarea,
+#rybbit-admin-app select {
+  font-size: 14px;
+}

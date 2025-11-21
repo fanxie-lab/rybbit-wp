@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<phpunit
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
+	bootstrap="tests/phpunit/bootstrap.php"
+	backupGlobals="false"
+	colors="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+>
+	<testsuites>
+		<testsuite name="Rybbit Analytics Test Suite">
+			<directory suffix=".php">./tests/phpunit</directory>
+		</testsuite>
+	</testsuites>
+	<coverage>
+		<include>
+			<directory suffix=".php">./includes</directory>
+		</include>
+		<exclude>
+			<file>./includes/index.php</file>
+		</exclude>
+		<report>
+			<html outputDirectory="./coverage"/>
+			<clover outputFile="./coverage/clover.xml"/>
+		</report>
+	</coverage>
+</phpunit>
