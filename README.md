@@ -370,4 +370,3 @@ Built with:
 
 ---
 
-Made with ❤️ by [Rybbit](https://rybbit.com)
