@@ -1,106 +1,89 @@
 <template>
-  <div class="woocommerce">
-    <div class="mb-6">
-      <h2 class="text-2xl font-semibold text-gray-800">WooCommerce Integration</h2>
-      <p class="text-gray-600 mt-1">
+  <div class="space-y-6">
+    <div>
+      <h2 class="text-2xl font-semibold tracking-tight">WooCommerce Integration</h2>
+      <p class="text-muted-foreground">
         Automatically track ecommerce events from your WooCommerce store
       </p>
     </div>
 
-    <!-- WooCommerce Not Installed Warning -->
-    <div v-if="!isWooCommerceActive" class="woo-not-installed mb-6">
-      <div class="flex items-start gap-4">
-        <div class="flex-shrink-0">
-          <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-        </div>
-        <div class="flex-1">
-          <h3 class="text-lg font-medium text-amber-800">WooCommerce Not Detected</h3>
-          <p class="text-sm text-amber-700 mt-1">
-            WooCommerce does not appear to be installed or activated on your site.
-            These settings will be saved but ecommerce tracking will not function until WooCommerce is active.
-          </p>
-          <a
-            href="https://wordpress.org/plugins/woocommerce/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-1 text-sm text-amber-800 hover:text-amber-900 mt-2 font-medium"
-          >
-            Install WooCommerce
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
-          </a>
-        </div>
-      </div>
-    </div>
+    <!-- WooCommerce Status Alert -->
+    <Alert v-if="!isWooCommerceActive" variant="warning">
+      <AlertTriangle class="h-4 w-4" />
+      <AlertTitle>WooCommerce Not Detected</AlertTitle>
+      <AlertDescription>
+        WooCommerce does not appear to be installed or activated on your site.
+        These settings will be saved but ecommerce tracking will not function until WooCommerce is active.
+        <a
+          href="https://wordpress.org/plugins/woocommerce/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-medium underline inline-flex items-center gap-1 ml-1"
+        >
+          Install WooCommerce
+          <ExternalLink class="h-3 w-3" />
+        </a>
+      </AlertDescription>
+    </Alert>
 
-    <!-- WooCommerce Active Status -->
-    <div v-else class="woo-active-status mb-6">
-      <div class="flex items-center gap-3">
-        <div class="flex items-center justify-center w-8 h-8 bg-green-100 rounded-full">
-          <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
-        <div>
-          <p class="text-sm font-medium text-green-800">WooCommerce Detected</p>
-          <p class="text-xs text-green-600">Ecommerce tracking is available for your store</p>
-        </div>
-      </div>
-    </div>
+    <Alert v-else variant="success">
+      <CheckCircle2 class="h-4 w-4" />
+      <AlertTitle>WooCommerce Detected</AlertTitle>
+      <AlertDescription>
+        Ecommerce tracking is available for your store
+      </AlertDescription>
+    </Alert>
 
-    <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4">
+    <!-- Main layout: main content + sidebar -->
+    <div class="flex flex-col lg:flex-row gap-6">
       <!-- Main Settings Panel -->
-      <div class="space-y-4">
+      <div class="flex-1 min-w-0 space-y-6">
         <!-- Master Toggle Card -->
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">
-              <svg class="w-5 h-5 text-rybbit-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              <ShoppingCart class="h-5 w-5 text-primary mr-2" />
               Ecommerce Tracking
-            </h3>
-          </div>
-
-          <div class="card-body">
+            </CardTitle>
+          </CardHeader>
+          <CardContent class="pt-6">
             <div class="flex items-start justify-between gap-4">
-              <div class="flex-1">
-                <h4 class="text-base font-medium text-gray-900">Enable WooCommerce Tracking</h4>
-                <p class="text-sm text-gray-500 mt-1">
+              <div class="flex-1 space-y-1">
+                <h4 class="text-base font-medium">Enable WooCommerce Tracking</h4>
+                <p class="text-sm text-muted-foreground">
                   When enabled, Rybbit will automatically track product views, cart additions,
                   checkout initiations, and completed purchases from your WooCommerce store.
                 </p>
               </div>
-              <ToggleSwitch
+              <Switch
                 v-model="localSettings.woocommerce.enabled"
                 :disabled="loading"
               />
             </div>
 
-            <!-- Disabled overlay message -->
-            <div v-if="!localSettings.woocommerce.enabled" class="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
-              <p class="text-sm text-gray-500">
+            <!-- Disabled message -->
+            <Alert v-if="!localSettings.woocommerce.enabled" variant="default" class="mt-4">
+              <Info class="h-4 w-4" />
+              <AlertDescription>
                 Enable WooCommerce tracking above to configure individual event settings.
-              </p>
-            </div>
-          </div>
-        </div>
+              </AlertDescription>
+            </Alert>
+          </CardContent>
+        </Card>
 
-        <!-- Individual Event Toggles -->
-        <div class="card" :class="{ 'opacity-60': !localSettings.woocommerce.enabled }">
-          <div class="card-header">
-            <h3 class="card-title">
+        <!-- Individual Event Toggles Card -->
+        <Card :class="{ 'opacity-60': !localSettings.woocommerce.enabled }">
+          <CardHeader>
+            <CardTitle>
               Event Configuration
-              <HelpTooltip
-                text="Choose which ecommerce events to track. Each event sends data to your Rybbit dashboard when the action occurs."
-              />
-            </h3>
-          </div>
-
-          <div class="card-body">
+              <Tooltip content="Choose which ecommerce events to track. Each event sends data to your Rybbit dashboard when the action occurs.">
+                <button type="button" class="inline-flex items-center justify-center text-muted-foreground hover:text-foreground">
+                  <CircleHelp class="h-4 w-4" />
+                </button>
+              </Tooltip>
+            </CardTitle>
+          </CardHeader>
+          <CardContent class="pt-6">
             <div class="space-y-4">
               <!-- View Item Event -->
               <EventToggle
@@ -150,152 +133,112 @@
                 @toggle-expand="toggleExpand('purchase')"
               />
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        <!-- Save Actions -->
-        <div class="sticky bottom-0 bg-white border-t border-gray-200 p-4 rounded-lg shadow-sm flex items-center justify-between gap-4">
-          <div class="flex-1">
-            <p v-if="hasUnsavedChanges" class="text-sm text-gray-600">
-              You have unsaved changes
-            </p>
-          </div>
+        <!-- Save Actions Bar -->
+        <div class="sticky bottom-0 bg-background border rounded-lg shadow-sm p-4 flex items-center justify-between gap-4">
+          <p v-if="hasUnsavedChanges" class="text-sm text-muted-foreground">
+            You have unsaved changes
+          </p>
+          <div v-else />
 
           <div class="flex items-center gap-3">
-            <button
+            <Button
               v-if="hasUnsavedChanges"
-              @click="resetChanges"
-              class="btn btn-text"
+              variant="ghost"
               :disabled="loading"
+              @click="resetChanges"
             >
               Reset
-            </button>
+            </Button>
 
-            <button
-              @click="saveSettings"
+            <Button
               :disabled="loading || !hasUnsavedChanges"
-              class="btn btn-primary"
+              @click="saveSettings"
             >
-              <svg v-if="!loading" class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <LoadingSpinner v-else size="small" class="mr-2" />
+              <Loader2 v-if="loading" class="mr-2 h-4 w-4 animate-spin" />
+              <Check v-else class="mr-2 h-4 w-4" />
               {{ loading ? 'Saving...' : 'Save Changes' }}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
 
       <!-- Sidebar Info Panel -->
-      <div class="space-y-4">
+      <div class="lg:w-80 flex-shrink-0 space-y-6">
         <!-- Info Card -->
-        <div class="card bg-blue-50 border-blue-200">
-          <div class="card-body">
-            <div class="flex items-start gap-3">
-              <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <h4 class="text-sm font-semibold text-blue-800">About Ecommerce Tracking</h4>
-                <p class="text-sm text-blue-700 mt-1">
-                  Rybbit captures ecommerce events in real-time as visitors interact with your store.
-                  This data helps you understand your sales funnel and optimize conversions.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Alert variant="info" class="shadow-sm">
+          <Info class="h-4 w-4" />
+          <AlertTitle>About Ecommerce Tracking</AlertTitle>
+          <AlertDescription>
+            Rybbit captures ecommerce events in real-time as visitors interact with your store.
+            This data helps you understand your sales funnel and optimize conversions.
+          </AlertDescription>
+        </Alert>
 
-        <!-- Event Data Summary -->
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title text-base">Data Captured</h3>
-          </div>
-          <div class="card-body">
+        <!-- Event Data Summary Card -->
+        <Card>
+          <CardHeader>
+            <CardTitle class="text-base">Data Captured</CardTitle>
+          </CardHeader>
+          <CardContent class="pt-6">
             <ul class="space-y-2 text-sm">
-              <li class="flex items-start gap-2">
-                <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <span class="text-gray-600">Product SKU, name, and category</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <span class="text-gray-600">Price and quantity</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <span class="text-gray-600">Order total, tax, and shipping</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <span class="text-gray-600">Transaction ID and currency</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <span class="text-gray-600">Variable product attributes</span>
+              <li v-for="item in dataCaptured" :key="item" class="flex items-start gap-2">
+                <CheckCircle2 class="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <span class="text-muted-foreground">{{ item }}</span>
               </li>
             </ul>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        <!-- Documentation Link -->
-        <div class="card">
-          <div class="card-body">
-            <h4 class="text-sm font-semibold text-gray-800 mb-2">Need Help?</h4>
-            <p class="text-sm text-gray-600 mb-3">
+        <!-- Documentation Link Card -->
+        <Card>
+          <CardContent class="pt-6">
+            <h4 class="text-sm font-semibold mb-2">Need Help?</h4>
+            <p class="text-sm text-muted-foreground mb-3">
               Learn more about ecommerce tracking and how to analyze your store data.
             </p>
             <a
               href="https://www.rybbit.io/docs"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 text-sm text-rybbit-primary hover:text-rybbit-secondary font-medium"
+              class="inline-flex items-center gap-2 text-sm text-primary font-medium hover:underline"
             >
               View Documentation
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
+              <ExternalLink class="h-4 w-4" />
             </a>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        <!-- Quick Stats Placeholder -->
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title text-base">Tracking Status</h3>
-          </div>
-          <div class="card-body">
+        <!-- Quick Stats Card -->
+        <Card>
+          <CardHeader>
+            <CardTitle class="text-base">Tracking Status</CardTitle>
+          </CardHeader>
+          <CardContent class="pt-6">
             <div class="space-y-3">
               <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-600">Master Toggle</span>
-                <span :class="['text-sm font-medium', localSettings.woocommerce.enabled ? 'text-green-600' : 'text-gray-400']">
+                <span class="text-sm text-muted-foreground">Master Toggle</span>
+                <Badge :variant="localSettings.woocommerce.enabled ? 'success' : 'secondary'">
                   {{ localSettings.woocommerce.enabled ? 'Enabled' : 'Disabled' }}
-                </span>
+                </Badge>
               </div>
               <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-600">Active Events</span>
-                <span class="text-sm font-medium text-gray-900">
+                <span class="text-sm text-muted-foreground">Active Events</span>
+                <span class="text-sm font-medium">
                   {{ activeEventCount }} / 4
                 </span>
               </div>
               <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-600">WooCommerce</span>
-                <span :class="['text-sm font-medium', isWooCommerceActive ? 'text-green-600' : 'text-amber-600']">
+                <span class="text-sm text-muted-foreground">WooCommerce</span>
+                <Badge :variant="isWooCommerceActive ? 'success' : 'warning'">
                   {{ isWooCommerceActive ? 'Active' : 'Not Found' }}
-                </span>
+                </Badge>
               </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   </div>
@@ -306,9 +249,29 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '../stores/settings'
 import { useNotificationsStore } from '../stores/notifications'
-import ToggleSwitch from '../components/ToggleSwitch.vue'
-import HelpTooltip from '../components/HelpTooltip.vue'
-import LoadingSpinner from '../components/LoadingSpinner.vue'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  Button,
+  Switch,
+  Alert,
+  AlertTitle,
+  AlertDescription,
+  Badge,
+  Tooltip
+} from '@components/ui'
+import {
+  ShoppingCart,
+  CircleHelp,
+  Loader2,
+  Check,
+  CheckCircle2,
+  AlertTriangle,
+  ExternalLink,
+  Info
+} from 'lucide-vue-next'
 import EventToggle from '../components/EventToggle.vue'
 import api from '../services/api'
 
@@ -333,7 +296,7 @@ const localSettings = ref({
   }
 })
 
-// Sample event data (will be fetched from API if WooCommerce is active)
+// Sample event data
 const sampleEvents = ref({
   view_item: {
     event: 'view_item',
@@ -388,6 +351,15 @@ const sampleEvents = ref({
   }
 })
 
+// Static data
+const dataCaptured = [
+  'Product SKU, name, and category',
+  'Price and quantity',
+  'Order total, tax, and shipping',
+  'Transaction ID and currency',
+  'Variable product attributes',
+]
+
 // Expanded event tracking
 const expandedEvent = ref(null)
 
@@ -426,7 +398,6 @@ async function fetchSampleEvents() {
       sampleEvents.value = { ...sampleEvents.value, ...data }
     }
   } catch (error) {
-    // Silently fail - use default sample data
     console.debug('Could not fetch sample events:', error.message)
   }
 }
@@ -472,7 +443,6 @@ onMounted(async () => {
       }
     }))
   }
-  // Fetch sample events if WooCommerce is active
   await fetchSampleEvents()
 })
 
@@ -493,45 +463,3 @@ watch(settings, (newSettings) => {
   }
 }, { deep: true })
 </script>
-
-<style scoped>
-.card {
-  @apply bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden;
-}
-
-.card-header {
-  @apply px-6 py-4 border-b border-gray-200 bg-gray-50;
-}
-
-.card-title {
-  @apply text-lg font-medium text-gray-800 flex items-center;
-}
-
-.card-body {
-  @apply p-6;
-}
-
-.btn {
-  @apply px-4 py-2 rounded-md font-medium transition-colors inline-flex items-center justify-center;
-}
-
-.btn-primary {
-  @apply bg-rybbit-primary text-white hover:bg-rybbit-secondary;
-}
-
-.btn-text {
-  @apply text-gray-600 hover:text-gray-900;
-}
-
-.btn:disabled {
-  @apply opacity-50 cursor-not-allowed;
-}
-
-.woo-not-installed {
-  @apply p-4 bg-amber-50 border border-amber-200 rounded-lg;
-}
-
-.woo-active-status {
-  @apply p-4 bg-green-50 border border-green-200 rounded-lg;
-}
-</style>

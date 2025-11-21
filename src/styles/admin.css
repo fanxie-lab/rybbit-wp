@@ -1,63 +1,133 @@
-/* Import Tailwind base, components, and utilities */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom base styles */
+/* shadcn-vue CSS Variables */
 @layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 160 84% 39%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 160 84% 39%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
   body {
-    @apply antialiased;
+    @apply bg-background text-foreground antialiased;
   }
 }
 
-/* Custom component styles */
-@layer components {
-  /* Loading spinner */
-  .rybbit-loading {
-    @apply flex flex-col items-center justify-center p-12;
-  }
-
-  .rybbit-loading-spinner {
-    @apply w-12 h-12 border-4 border-rybbit-light border-t-rybbit-primary rounded-full animate-spin;
-  }
-
-  /* Custom scrollbar */
-  .custom-scrollbar::-webkit-scrollbar {
-    @apply w-2;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-track {
-    @apply bg-gray-100 rounded;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 rounded hover:bg-gray-400;
-  }
-}
-
-/* Custom utility classes */
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
-
-/* WordPress admin compatibility overrides */
+/* WordPress Admin Isolation - All styles scoped to our app container */
 #rybbit-admin-app {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  line-height: 1.5;
+  color: hsl(222.2 84% 4.9%);
 }
 
-/* Reset WordPress admin styles within our app */
-#rybbit-admin-app * {
+#rybbit-admin-app *,
+#rybbit-admin-app *::before,
+#rybbit-admin-app *::after {
   box-sizing: border-box;
 }
 
+/* Reset WordPress admin element styles */
+#rybbit-admin-app h1,
+#rybbit-admin-app h2,
+#rybbit-admin-app h3,
+#rybbit-admin-app h4,
+#rybbit-admin-app h5,
+#rybbit-admin-app h6,
+#rybbit-admin-app p {
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure our grid and flex work */
+#rybbit-admin-app .grid {
+  display: grid !important;
+}
+
+#rybbit-admin-app .flex {
+  display: flex !important;
+}
+
+#rybbit-admin-app .inline-flex {
+  display: inline-flex !important;
+}
+
+/* Form elements reset for WordPress admin */
 #rybbit-admin-app input[type="text"],
 #rybbit-admin-app input[type="email"],
 #rybbit-admin-app input[type="url"],
 #rybbit-admin-app input[type="password"],
 #rybbit-admin-app input[type="number"],
+#rybbit-admin-app input[type="search"],
 #rybbit-admin-app textarea,
 #rybbit-admin-app select {
   font-size: 14px;
+  max-width: none;
+  width: 100%;
+  margin: 0;
+}
+
+/* Links reset */
+#rybbit-admin-app a {
+  text-decoration: none;
+}
+
+#rybbit-admin-app a:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+/* Button reset for WordPress admin */
+#rybbit-admin-app button {
+  font-family: inherit;
+}
+
+/* Custom loading spinner */
+@layer components {
+  .rybbit-loading {
+    @apply flex flex-col items-center justify-center p-12;
+  }
+
+  .rybbit-loading-spinner {
+    @apply w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin;
+  }
+}
+
+/* Custom scrollbar */
+@layer components {
+  .custom-scrollbar::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-muted rounded;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded hover:bg-muted-foreground/50;
+  }
 }

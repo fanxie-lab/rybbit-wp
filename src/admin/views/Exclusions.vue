@@ -1,26 +1,27 @@
 <template>
-  <div class="exclusions">
-    <div class="mb-6">
-      <h2 class="text-2xl font-semibold text-gray-800">Exclusions</h2>
-      <p class="text-gray-600 mt-1">
+  <div class="space-y-6">
+    <div>
+      <h2 class="text-2xl font-semibold tracking-tight">Exclusions</h2>
+      <p class="text-muted-foreground">
         Control which URLs and pages are excluded from or masked in analytics tracking
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <!-- URL Pattern Exclusions -->
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- URL Pattern Exclusions Card -->
+      <Card>
+        <CardHeader>
+          <CardTitle>
             URL Pattern Exclusions
-            <HelpTooltip
-              text="Pages matching these patterns will not be tracked. Use * for single path segment and ** for multiple segments."
-            />
-          </h3>
-        </div>
-
-        <div class="card-body space-y-4">
-          <p class="text-sm text-gray-600">
+            <Tooltip content="Pages matching these patterns will not be tracked. Use * for single path segment and ** for multiple segments.">
+              <button type="button" class="inline-flex items-center justify-center text-muted-foreground hover:text-foreground">
+                <CircleHelp class="h-4 w-4" />
+              </button>
+            </Tooltip>
+          </CardTitle>
+        </CardHeader>
+        <CardContent class="pt-6 space-y-4">
+          <p class="text-sm text-muted-foreground">
             Add URL patterns to exclude specific pages or sections from tracking.
             Visitors to these URLs will not appear in your analytics.
           </p>
@@ -41,25 +42,26 @@
             item-label-plural="patterns"
             @remove="removeSkipPattern"
           />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
-      <!-- URL Masking Patterns -->
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">
+      <!-- URL Masking Patterns Card -->
+      <Card>
+        <CardHeader>
+          <CardTitle>
             URL Masking Patterns
-            <HelpTooltip
-              text="URLs matching these patterns will have dynamic segments replaced with placeholders in your analytics, protecting sensitive data."
-            />
-          </h3>
-        </div>
-
-        <div class="card-body space-y-4">
-          <p class="text-sm text-gray-600">
+            <Tooltip content="URLs matching these patterns will have dynamic segments replaced with placeholders in your analytics, protecting sensitive data.">
+              <button type="button" class="inline-flex items-center justify-center text-muted-foreground hover:text-foreground">
+                <CircleHelp class="h-4 w-4" />
+              </button>
+            </Tooltip>
+          </CardTitle>
+        </CardHeader>
+        <CardContent class="pt-6 space-y-4">
+          <p class="text-sm text-muted-foreground">
             Mask dynamic URL segments to aggregate similar pages. For example,
-            <code class="text-xs bg-gray-100 px-1 py-0.5 rounded">/user/123/profile</code> becomes
-            <code class="text-xs bg-gray-100 px-1 py-0.5 rounded">/user/*/profile</code>.
+            <code class="text-xs bg-muted px-1 py-0.5 rounded">/user/123/profile</code> becomes
+            <code class="text-xs bg-muted px-1 py-0.5 rounded">/user/*/profile</code>.
           </p>
 
           <PatternInput
@@ -78,25 +80,25 @@
             item-label-plural="patterns"
             @remove="removeMaskPattern"
           />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       <!-- Individual Post/Page Exclusions - Full width -->
-      <div class="card md:col-span-2">
-        <div class="card-header">
-          <h3 class="card-title">
+      <Card class="md:col-span-2">
+        <CardHeader>
+          <CardTitle>
             Individual Post/Page Exclusions
-            <HelpTooltip
-              text="Exclude specific posts or pages from tracking by searching and selecting them below."
-            />
-          </h3>
-        </div>
-
-        <div class="card-body">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <!-- Search section -->
+            <Tooltip content="Exclude specific posts or pages from tracking by searching and selecting them below.">
+              <button type="button" class="inline-flex items-center justify-center text-muted-foreground hover:text-foreground">
+                <CircleHelp class="h-4 w-4" />
+              </button>
+            </Tooltip>
+          </CardTitle>
+        </CardHeader>
+        <CardContent class="pt-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="space-y-4">
-              <p class="text-sm text-gray-600">
+              <p class="text-sm text-muted-foreground">
                 Search for specific posts or pages to exclude from analytics tracking.
                 These pages will not appear in your Rybbit dashboard.
               </p>
@@ -108,18 +110,19 @@
               />
             </div>
 
-            <!-- List section -->
             <div class="space-y-4">
               <div class="flex items-center justify-between">
-                <h4 class="text-sm font-medium text-gray-700">Excluded Content</h4>
-                <button
+                <h4 class="text-sm font-medium">Excluded Content</h4>
+                <Button
                   v-if="localSettings.exclusions.length > 0"
-                  type="button"
-                  class="text-xs text-red-600 hover:text-red-700"
+                  variant="ghost"
+                  size="sm"
+                  class="text-destructive hover:text-destructive"
                   @click="clearAllExclusions"
                 >
+                  <Trash2 class="h-4 w-4 mr-1" />
                   Clear all
-                </button>
+                </Button>
               </div>
 
               <ExclusionList
@@ -131,77 +134,85 @@
               />
             </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
-      <!-- Wildcard Reference - Full width -->
-      <div class="card md:col-span-2">
-        <div class="card-header bg-blue-50">
-          <h3 class="card-title text-blue-800">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+      <!-- Wildcard Reference Card - Full width -->
+      <Card class="md:col-span-2">
+        <CardHeader class="bg-blue-50/50">
+          <CardTitle class="text-blue-900">
+            <Info class="h-5 w-5 mr-2 text-blue-600" />
             Pattern Wildcard Reference
-          </h3>
-        </div>
-
-        <div class="card-body">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          </CardTitle>
+        </CardHeader>
+        <CardContent class="pt-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 class="text-sm font-semibold text-gray-800 mb-2">Single Segment Wildcard: <code class="bg-gray-100 px-1.5 py-0.5 rounded">*</code></h4>
-              <p class="text-sm text-gray-600 mb-2">
+              <h4 class="text-sm font-semibold mb-2">
+                Single Segment Wildcard: <code class="bg-muted px-1.5 py-0.5 rounded">*</code>
+              </h4>
+              <p class="text-sm text-muted-foreground mb-2">
                 Matches any single path segment (text between slashes).
               </p>
-              <ul class="text-sm text-gray-600 space-y-1">
-                <li><code class="bg-gray-100 px-1 py-0.5 rounded text-xs">/blog/*</code> matches <code class="text-xs">/blog/post-1</code>, <code class="text-xs">/blog/my-article</code></li>
-                <li><code class="bg-gray-100 px-1 py-0.5 rounded text-xs">/user/*/edit</code> matches <code class="text-xs">/user/123/edit</code>, <code class="text-xs">/user/john/edit</code></li>
+              <ul class="text-sm text-muted-foreground space-y-1">
+                <li>
+                  <code class="bg-muted px-1 py-0.5 rounded text-xs">/blog/*</code> matches
+                  <code class="text-xs">/blog/post-1</code>, <code class="text-xs">/blog/my-article</code>
+                </li>
+                <li>
+                  <code class="bg-muted px-1 py-0.5 rounded text-xs">/user/*/edit</code> matches
+                  <code class="text-xs">/user/123/edit</code>, <code class="text-xs">/user/john/edit</code>
+                </li>
               </ul>
             </div>
 
             <div>
-              <h4 class="text-sm font-semibold text-gray-800 mb-2">Multi-Segment Wildcard: <code class="bg-gray-100 px-1.5 py-0.5 rounded">**</code></h4>
-              <p class="text-sm text-gray-600 mb-2">
+              <h4 class="text-sm font-semibold mb-2">
+                Multi-Segment Wildcard: <code class="bg-muted px-1.5 py-0.5 rounded">**</code>
+              </h4>
+              <p class="text-sm text-muted-foreground mb-2">
                 Matches any number of path segments (including none).
               </p>
-              <ul class="text-sm text-gray-600 space-y-1">
-                <li><code class="bg-gray-100 px-1 py-0.5 rounded text-xs">/admin/**</code> matches <code class="text-xs">/admin/settings</code>, <code class="text-xs">/admin/users/edit/5</code></li>
-                <li><code class="bg-gray-100 px-1 py-0.5 rounded text-xs">/docs/**</code> matches all documentation pages</li>
+              <ul class="text-sm text-muted-foreground space-y-1">
+                <li>
+                  <code class="bg-muted px-1 py-0.5 rounded text-xs">/admin/**</code> matches
+                  <code class="text-xs">/admin/settings</code>, <code class="text-xs">/admin/users/edit/5</code>
+                </li>
+                <li>
+                  <code class="bg-muted px-1 py-0.5 rounded text-xs">/docs/**</code> matches all documentation pages
+                </li>
               </ul>
             </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
+    </div>
 
-      <!-- Save Actions -->
-      <div class="md:col-span-2 sticky bottom-0 bg-white border-t border-gray-200 p-4 mt-2 rounded-lg shadow-sm flex items-center justify-between gap-4">
-        <div class="flex-1">
-          <p v-if="hasUnsavedChanges" class="text-sm text-gray-600">
-            You have unsaved changes
-          </p>
-        </div>
+    <!-- Save Actions Bar -->
+    <div class="sticky bottom-0 bg-background border rounded-lg shadow-sm p-4 flex items-center justify-between gap-4">
+      <p v-if="hasUnsavedChanges" class="text-sm text-muted-foreground">
+        You have unsaved changes
+      </p>
+      <div v-else />
 
-        <div class="flex items-center gap-3">
-          <button
-            v-if="hasUnsavedChanges"
-            @click="resetChanges"
-            class="btn btn-text"
-            :disabled="loading"
-          >
-            Reset
-          </button>
+      <div class="flex items-center gap-3">
+        <Button
+          v-if="hasUnsavedChanges"
+          variant="ghost"
+          :disabled="loading"
+          @click="resetChanges"
+        >
+          Reset
+        </Button>
 
-          <button
-            @click="saveSettings"
-            :disabled="loading || !hasUnsavedChanges"
-            class="btn btn-primary"
-          >
-            <svg v-if="!loading" class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-            <LoadingSpinner v-else size="small" class="mr-2" />
-            {{ loading ? 'Saving...' : 'Save Changes' }}
-          </button>
-        </div>
+        <Button
+          :disabled="loading || !hasUnsavedChanges"
+          @click="saveSettings"
+        >
+          <Loader2 v-if="loading" class="mr-2 h-4 w-4 animate-spin" />
+          <Check v-else class="mr-2 h-4 w-4" />
+          {{ loading ? 'Saving...' : 'Save Changes' }}
+        </Button>
       </div>
     </div>
   </div>
@@ -212,8 +223,15 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '../stores/settings'
 import { useNotificationsStore } from '../stores/notifications'
-import HelpTooltip from '../components/HelpTooltip.vue'
-import LoadingSpinner from '../components/LoadingSpinner.vue'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  Button,
+  Tooltip
+} from '@components/ui'
+import { CircleHelp, Loader2, Check, Trash2, Info } from 'lucide-vue-next'
 import PatternInput from '../components/PatternInput.vue'
 import PostSelector from '../components/PostSelector.vue'
 import ExclusionList from '../components/ExclusionList.vue'
@@ -222,18 +240,15 @@ const settingsStore = useSettingsStore()
 const notificationsStore = useNotificationsStore()
 const { settings, loading } = storeToRefs(settingsStore)
 
-// Local state for form
 const localSettings = ref({
   skip_patterns: [],
   mask_patterns: [],
   exclusions: []
 })
 
-// Example patterns for quick add
 const skipPatternExamples = ['/wp-admin/**', '/wp-login.php', '/checkout', '/cart']
 const maskPatternExamples = ['/user/*', '/order/*', '/product/*/reviews']
 
-// Computed properties
 const hasUnsavedChanges = computed(() => {
   return JSON.stringify({
     skip_patterns: localSettings.value.skip_patterns,
@@ -252,11 +267,7 @@ const excludedPostIds = computed(() => {
     .map(e => e.post_id)
 })
 
-// Pattern management
-function onPatternAdded(type) {
-  // Pattern was added via PatternInput v-model
-  // Could show notification or perform additional logic
-}
+function onPatternAdded(type) {}
 
 function removeSkipPattern(index) {
   localSettings.value.skip_patterns = localSettings.value.skip_patterns.filter((_, i) => i !== index)
@@ -266,7 +277,6 @@ function removeMaskPattern(index) {
   localSettings.value.mask_patterns = localSettings.value.mask_patterns.filter((_, i) => i !== index)
 }
 
-// Post exclusion management
 function onPostExcluded(exclusion) {
   notificationsStore.info(`Added "${exclusion.title}" to exclusions`)
 }
@@ -286,7 +296,6 @@ function clearAllExclusions() {
   }
 }
 
-// Save and reset
 async function saveSettings() {
   try {
     await settingsStore.updateSettings({
@@ -310,7 +319,6 @@ function resetChanges() {
   notificationsStore.info('Changes reset to last saved values')
 }
 
-// Initialize
 onMounted(async () => {
   await settingsStore.fetchSettings()
   localSettings.value = {
@@ -320,7 +328,6 @@ onMounted(async () => {
   }
 })
 
-// Watch for external settings changes
 watch(settings, (newSettings) => {
   if (!hasUnsavedChanges.value) {
     localSettings.value = {
@@ -331,37 +338,3 @@ watch(settings, (newSettings) => {
   }
 }, { deep: true })
 </script>
-
-<style scoped>
-.card {
-  @apply bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden;
-}
-
-.card-header {
-  @apply px-6 py-4 border-b border-gray-200 bg-gray-50;
-}
-
-.card-title {
-  @apply text-lg font-medium text-gray-800 flex items-center gap-2;
-}
-
-.card-body {
-  @apply p-6;
-}
-
-.btn {
-  @apply px-4 py-2 rounded-md font-medium transition-colors inline-flex items-center justify-center;
-}
-
-.btn-primary {
-  @apply bg-rybbit-primary text-white hover:bg-rybbit-secondary;
-}
-
-.btn-text {
-  @apply text-gray-600 hover:text-gray-900;
-}
-
-.btn:disabled {
-  @apply opacity-50 cursor-not-allowed;
-}
-</style>

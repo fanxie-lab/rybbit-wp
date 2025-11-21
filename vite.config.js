@@ -14,7 +14,8 @@ export default defineConfig({
       '@components': resolve(__dirname, 'src/admin/components'),
       '@views': resolve(__dirname, 'src/admin/views'),
       '@stores': resolve(__dirname, 'src/admin/stores'),
-      '@services': resolve(__dirname, 'src/admin/services')
+      '@services': resolve(__dirname, 'src/admin/services'),
+      '@lib': resolve(__dirname, 'src/admin/lib'),
     }
   },
 
@@ -64,16 +65,6 @@ export default defineConfig({
     hmr: {
       host: 'localhost',
       protocol: 'ws'
-    }
-  },
-
-  // CSS config
-  css: {
-    postcss: {
-      plugins: [
-        require('tailwindcss'),
-        require('autoprefixer')
-      ]
     }
   },
 
